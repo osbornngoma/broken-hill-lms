@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Broken Hill Lodge • Management System</title>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      background: #f4f7fc;
+      display: flex;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    .app-container {
+      max-width: 1400px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 2rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+    }
+
+    /* ---- Header ---- */
+    .app-header {
+      background: #0b2b3d;
+      color: white;
+      padding: 1.25rem 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 4px solid #f0b429;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo-icon {
+      background: #f0b429;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: #0b2b3d;
+      font-weight: 700;
+    }
+
+    .logo-area h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+    }
+
+    .logo-area span {
+      font-weight: 300;
+      color: #cbd5e1;
+      font-size: 0.9rem;
+      margin-left: 0.5rem;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .global-search {
+      background: #1e3a4d;
+      border-radius: 40px;
+      padding: 0.5rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 1px solid #2d4a5e;
+    }
+
+    .global-search i {
+      color: #94a3b8;
+      font-size: 0.9rem;
+    }
+
+    .global-search input {
+      background: transparent;
+      border: none;
+      color: white;
+      outline: none;
+      font-size: 0.9rem;
+      width: 200px;
+    }
+
+    .global-search input::placeholder {
+      color: #94a3b8;
+    }
+
+    .user-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: #1e3a4d;
+      padding: 0.5rem 1rem 0.5rem 0.75rem;
+      border-radius: 40px;
+      border: 1px solid #2d4a5e;
+    }
+
+    .user-badge i {
+      color: #f0b429;
+    }
+
+    .user-badge span {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    /* ---- Navigation Tabs ---- */
+    .nav-tabs {
+      display: flex;
+      background: #ffffff;
+      padding: 0 2rem;
+      border-bottom: 1px solid #e2e8f0;
+      gap: 0.25rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-tab {
+      padding: 1rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #64748b;
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-tab i {
+      font-size: 1rem;
+    }
+
+    .nav-tab:hover {
+      color: #0b2b3d;
+      background: #f8fafc;
+    }
+
+    .nav-tab.active {
+      color: #0b2b3d;
+      border-bottom-color: #f0b429;
+      font-weight: 600;
+    }
+
+    /* ---- Main Content ---- */
+    .main-content {
+      padding: 2rem;
+      background: #f8fafc;
+    }
+
+    .tab-panel {
+      display: none;
+      animation: fade 0.2s ease;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    @keyframes fade {
+      from { opacity: 0.5; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ---- Dashboard Cards ---- */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 1.25rem;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+      border: 1px solid #e9eef3;
+      display: flex;
+      flex-direction: column;
+      transition: 0.15s;
+    }
+
+    .stat-card:hover {
+      border-color: #f0b429;
+      box-shadow: 0 8px 20px -8px rgba(240, 180, 41, 0.2);
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #64748b;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #0b2b3d;
+      line-height: 1.2;
+    }
+
+    .stat-sub {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      margin-top: 0.3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .stat-sub i {
+      color: #22c55e;
+    }
+
+    .stat-sub.warning i {
+      color: #ef4444;
+    }
+
+    /* ---- Room Grid ---- */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .section-header h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #196fa0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .section-header h3 i {
+      color: #f0b429;
+    }
+
+    .room-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .room-card {
+      background: white;
+      border-radius: 0.85rem;
+      padding: 0.9rem 0.75rem;
+      border: 1px solid #e9eef3;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+      transition: 0.1s;
+      cursor: default;
+    }
+
+    .room-card .room-number {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #0b2b3d;
+      margin-bottom: 0.25rem;
+    }
+
+    .room-card .room-status {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      padding: 0.2rem 0.5rem;
+      border-radius: 30px;
+      display: inline-block;
+    }
+
+    .status-clean {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .status-dirty {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .status-occupied {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .status-maintenance {
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    /* ---- Tables ---- */
+    .table-wrapper {
+      background: white;
+      border-radius: 1.25rem;
+      border: 1px solid #e9eef3;
+      overflow: auto;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      min-width: 600px;
+    }
+
+    th {
+      text-align: left;
+      padding: 1rem 1.25rem;
+      background: #f1f5f9;
+      color: #1e293b;
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    td {
+      padding: 0.9rem 1.25rem;
+      border-bottom: 1px solid #f1f5f9;
+      color: #1e293b;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: #fafcff;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.7rem;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .badge-high {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .badge-medium {
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    .badge-low {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    /* ---- Buttons & Controls ---- */
+    .btn {
+      background: #f0b429;
+      border: none;
+      border-radius: 40px;
+      padding: 0.5rem 1.25rem;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: #0b2b3d;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: 0.15s;
+    }
+
+    .btn:hover {
+      background: #e0a81e;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid #cbd5e1;
+      color: #1e293b;
+    }
+
+    .btn-outline:hover {
+      background: #f1f5f9;
+      border-color: #94a3b8;
+    }
+
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .filter-bar input, .filter-bar select {
+      padding: 0.55rem 1rem;
+      border-radius: 40px;
+      border: 1px solid #d1d9e6;
+      background: white;
+      font-size: 0.9rem;
+      outline: none;
+      transition: 0.15s;
+    }
+
+    .filter-bar input:focus, .filter-bar select:focus {
+      border-color: #f0b429;
+      box-shadow: 0 0 0 3px rgba(240, 180, 41, 0.15);
+    }
+
+    /* ---- Housekeeping panel ---- */
+    .hk-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .hk-card {
+      background: white;
+      border-radius: 1rem;
+      padding: 1rem;
+      border: 1px solid #e9eef3;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .hk-room {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #0b2b3d;
+    }
+
+    .hk-actions {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      margin-top: 0.25rem;
+    }
+
+    .hk-btn {
+      background: #f1f5f9;
+      border: none;
+      border-radius: 30px;
+      padding: 0.35rem 0.9rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #334155;
+      cursor: pointer;
+      transition: 0.1s;
+    }
+
+    .hk-btn:hover {
+      background: #e2e8f0;
+    }
+
+    .hk-btn.clean {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .hk-btn.dirty {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    /* ---- Booking engine (guest view) ---- */
+    .booking-hero {
+      background: linear-gradient(135deg, #0b2b3d 0%, #1e4a63 100%);
+      border-radius: 1.5rem;
+      padding: 2.5rem 2rem;
+      color: white;
+      margin-bottom: 2rem;
+    }
+
+    .booking-hero h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .booking-hero p {
+      color: #cbd5e1;
+      margin-bottom: 1.5rem;
+    }
+
+    .booking-search {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(4px);
+      padding: 1.25rem;
+      border-radius: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      align-items: flex-end;
+    }
+
+    .booking-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      flex: 1 1 140px;
+    }
+
+    .booking-field label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+
+    .booking-field input, .booking-field select {
+      padding: 0.7rem 1rem;
+      border-radius: 12px;
+      border: 1px solid #334e63;
+      background: #1e3a4d;
+      color: white;
+      font-size: 0.9rem;
+      outline: none;
+      width: 100%;
+    }
+
+    .booking-field input::placeholder {
+      color: #94a3b8;
+    }
+
+    .booking-field input:focus, .booking-field select:focus {
+      border-color: #f0b429;
+    }
+
+    .room-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .room-item {
+      background: white;
+      border-radius: 1.25rem;
+      overflow: hidden;
+      border: 1px solid #e9eef3;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+      transition: 0.15s;
+    }
+
+    .room-item:hover {
+      box-shadow: 0 12px 25px -10px rgba(0, 0, 0, 0.1);
+    }
+
+    .room-img {
+      height: 140px;
+      background: #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #64748b;
+      font-size: 2rem;
+    }
+
+    .room-info {
+      padding: 1.25rem;
+    }
+
+    .room-info h4 {
+      font-size: 1.1rem;
+      color: #0b2b3d;
+      margin-bottom: 0.3rem;
+    }
+
+    .room-info .price {
+      font-weight: 700;
+      color: #f0b429;
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .room-info ul {
+      list-style: none;
+      font-size: 0.8rem;
+      color: #475569;
+      margin-bottom: 1rem;
+    }
+
+    .room-info ul li {
+      margin-bottom: 0.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .room-info ul li i {
+      color: #f0b429;
+      width: 14px;
+    }
+
+    /* ---- Utilities ---- */
+    .text-muted {
+      color: #64748b;
+    }
+
+    .mt-2 { margin-top: 0.5rem; }
+    .mt-3 { margin-top: 1rem; }
+    .mb-2 { margin-bottom: 0.5rem; }
+    .flex { display: flex; }
+    .items-center { align-items: center; }
+    .gap-1 { gap: 0.5rem; }
+    .gap-2 { gap: 1rem; }
+    .justify-between { justify-content: space-between; }
+
+    /* ---- Footer ---- */
+    .app-footer {
+      background: white;
+      border-top: 1px solid #e2e8f0;
+      padding: 1.25rem 2rem;
+      font-size: 0.8rem;
+      color: #94a3b8;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    /* ---- Responsive ---- */
+    @media (max-width: 700px) {
+      .app-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+      }
+      .global-search input {
+        width: 130px;
+      }
+      .nav-tabs {
+        padding: 0 1rem;
+      }
+      .nav-tab {
+        padding: 0.8rem 1rem;
+        font-size: 0.85rem;
+      }
+      .main-content {
+        padding: 1.25rem;
+      }
+      .booking-search {
+        flex-direction: column;
+      }
+      .stat-value {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo-area">
+        <div class="logo-icon">BH</div>
+        <div>
+          <h1>BROKEN HILL LODGE<span>LMS</span></h1>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div class="global-search">
+          <i class="fas fa-search"></i>
+          <input type="text" id="globalSearchInput" placeholder="Search guest, room, booking...">
+        </div>
+        <div class="user-badge">
+          <i class="fas fa-user-circle"></i>
+          <span>Reception</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs" id="navTabs">
+      <div class="nav-tab active" data-tab="dashboard"><i class="fas fa-chart-pie"></i> Dashboard</div>
+      <div class="nav-tab" data-tab="booking"><i class="fas fa-calendar-alt"></i> Booking</div>
+      <div class="nav-tab" data-tab="housekeeping"><i class="fas fa-broom"></i> Housekeeping</div>
+      <div class="nav-tab" data-tab="billing"><i class="fas fa-file-invoice"></i> Billing</div>
+      <div class="nav-tab" data-tab="requirements"><i class="fas fa-list-check"></i> Requirements</div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Dashboard Panel -->
+      <div id="panel-dashboard" class="tab-panel active">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Occupancy Rate</div>
+            <div class="stat-value" id="occupancyValue">84%</div>
+            <div class="stat-sub"><i class="fas fa-arrow-up"></i> +2.1% vs yesterday</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Clean Rooms</div>
+            <div class="stat-value" id="cleanCount">22</div>
+            <div class="stat-sub"><i class="fas fa-check-circle"></i> of 30 total</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Dirty Rooms</div>
+            <div class="stat-value" id="dirtyCount">6</div>
+            <div class="stat-sub warning"><i class="fas fa-exclamation-circle"></i> needs attention</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Arrivals Today</div>
+            <div class="stat-value">7</div>
+            <div class="stat-sub"><i class="fas fa-clock"></i> 3 pending check-in</div>
+          </div>
+        </div>
+
+        <div class="section-header">
+          <h3><i class="fas fa-door-open"></i> Live Room Status Grid</h3>
+          <button class="btn btn-outline" id="refreshRoomsBtn"><i class="fas fa-sync-alt"></i> Refresh</button>
+        </div>
+        <div class="room-grid" id="roomGridContainer">
+          <!-- Rendered via JS -->
+        </div>
+
+        <div class="section-header mt-3">
+          <h3><i class="fas fa-plane-arrival"></i> Arrivals and Departures</h3>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Guest Name</th><th>Room</th><th>Action</th><th>Status</th></tr>
+            </thead>
+            <tbody id="arrivalsTableBody">
+              <!-- JS populates -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Booking Panel (Guest-facing engine) -->
+      <div id="panel-booking" class="tab-panel">
+        <div class="booking-hero">
+          <h2>Discover Untmatched Luxury</h2>
+          <p>Experience nature without compromising comfort.</p>
+          <div class="booking-search">
+            <div class="booking-field">
+              <label>Check-In</label>
+              <input type="date" id="checkInDate" value="2026-10-12">
+            </div>
+            <div class="booking-field">
+              <label>Check-Out</label>
+              <input type="date" id="checkOutDate" value="2026-10-15">
+            </div>
+            <div class="booking-field">
+              <label>Guests</label>
+              <select id="guestCount">
+                <option>1 Guest</option>
+                <option selected>2 Guests</option>
+                <option>3 Guests</option>
+                <option>4 Guests</option>
+              </select>
+            </div>
+            <button class="btn" id="searchAvailabilityBtn" style="height: fit-content; padding: 0.8rem 2rem;"><i class="fas fa-search"></i> Search</button>
+          </div>
+        </div>
+
+        <div class="section-header">
+          <h3><i class="fas fa-bed"></i> Available Rooms <span id="roomCountBadge" style="font-weight:400; font-size:0.9rem; color:#64748b; margin-left:0.5rem;">(3 found)</span></h3>
+          <div class="filter-bar">
+            <select id="priceFilter">
+              <option value="all">All prices</option>
+              <option value="low">s$100</option>
+              <option value="mid">$100 - $120</option>
+              <option value="high">$120+</option>
+            </select>
+          </div>
+        </div>
+        <div class="room-list" id="availableRoomsList">
+          <!-- JS renders room cards -->
+        </div>
+      </div>
+
+      <!-- Housekeeping Panel -->
+      <div id="panel-housekeeping" class="tab-panel">
+        <div class="section-header">
+          <h3><i class="fas fa-broom"></i> Housekeeping Dashboard</h3>
+          <span class="text-muted" style="font-size:0.9rem;">Tap to update room status</span>
+        </div>
+        <div class="hk-grid" id="housekeepingGrid">
+          <!-- JS populates -->
+        </div>
+      </div>
+
+      <!-- Billing Panel -->
+      <div id="panel-billing" class="tab-panel">
+        <div class="section-header">
+          <h3><i class="fas fa-file-invoice-dolar"></i> Recent Folios & Invoices</h3>
+          <button class="btn btn-outline"><i class="fas fa-plus"></i> New Charge</button>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Invoice ID</th><th>Guest</th><th>Room</th><th>Amount</th><th>Tax</th><th>Status</th></tr>
+            </thead>
+            <tbody id="billingTableBody">
+              <!-- JS populates -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Requirements Panel -->
+      <div id="panel-requirements" class="tab-panel">
+        <div class="section-header">
+          <h3><i class="fas fa-clipboard-list"></i> Functional Requirements</h3>
+        </div>
+        <div class="table-wrapper mb-2">
+          <table>
+            <thead>
+              <tr><th>ID</th><th>Module</th><th>Description</th><th>User Role</th><th>Priority</th></tr>
+            </thead>
+            <tbody id="functionalReqBody">
+              <!-- JS populates -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section-header mt-3">
+          <h3><i class="fas fa-gauge-high"></i> Non-Functional Requirements</h3>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>ID</th><th>Category</th><th>Requirement</th><th>Metric</th><th>Priority</th></tr>
+            </thead>
+            <tbody id="nonFunctionalReqBody">
+              <!-- JS populates -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <span>Broken Hill Lodge Management System</span>
+      <span>© 2026</span>
+    </footer>
+  </div>
+
+  <script>
+    (function() {
+      // --------------------------------------------------------------
+      // DATA MODEL (derived from document)
+      // --------------------------------------------------------------
+      const rooms = [
+        { id: 'RM101', number: '101', category: 'Standard', status: 'clean', basePrice: 60 },
+        { id: 'RM102', number: '102', category: 'Standard', status: 'clean', basePrice: 60 },
+        { id: 'RM103', number: '103', category: 'Standard', status: 'dirty', basePrice: 60 },
+        { id: 'RM104', number: '104', category: 'Standard', status: 'maintenance', basePrice: 60 },
+        { id: 'RM105', number: '105', category: 'Deluxe', status: 'clean', basePrice: 100 },
+        { id: 'RM106', number: '106', category: 'Deluxe', status: 'clean', basePrice: 100 },
+        { id: 'RM107', number: '107', category: 'Deluxe', status: 'dirty', basePrice: 100 },
+        { id: 'RM108', number: '108', category: 'Deluxe', status: 'occupied', basePrice: 100 },
+        { id: 'RM201', number: '201', category: 'Riverfront Suite', status: 'clean', basePrice: 150 },
+        { id: 'RM202', number: '202', category: 'Riverfront Suite', status: 'clean', basePrice: 150 },
+        { id: 'RM203', number: '203', category: 'Riverfront Suite', status: 'dirty', basePrice: 150 },
+        { id: 'RM204', number: '204', category: 'Riverfront Suite', status: 'occupied', basePrice: 150 },
+        { id: 'RM301', number: '301', category: 'Safari Tent', status: 'clean', basePrice: 120 },
+        { id: 'RM302', number: '302', category: 'Safari Tent', status: 'clean', basePrice: 120 },
+        { id: 'RM303', number: '303', category: 'Safari Tent', status: 'dirty', basePrice: 120 },
+        { id: 'RM304', number: '304', category: 'Safari Tent', status: 'maintenance', basePrice: 120 },
+      ];
+
+      const arrivals = [
+        { guest: 'Jayden Mwiya', room: 'Riverfront', action: 'CHECKIN', status: 'Arriving' },
+        { guest: 'Maryjane Bukata', room: 'Safari Tent', action: 'BILLOUT', status: 'Departs' },
+        { guest: 'David Phiri', room: 'Deluxe', action: 'CHECKIN', status: 'Arriving' },
+      ];
+
+      const invoices = [
+        { id: 'INV-1001', guest: 'Jayden Mwiya', room: '201', amount: 960, tax: 96, status: 'Paid' },
+        { id: 'INV-1002', guest: 'Maryjane Bukata', room: '301', amount: 660, tax: 66, status: 'Pending' },
+        { id: 'INV-1003', guest: 'David Phiri', room: '106', amount: 540, tax: 54, status: 'Paid' },
+        { id: 'INV-1004', guest: 'Sarah Tembo', room: '202', amount: 960, tax: 96, status: 'Refunded' },
+      ];
+
+      const functionalReqs = [
+        { id: 'LMS-FR-001', module: 'Booking', desc: 'Select check-in/check-out dates and view live room availability', role: 'Guest, Travel Agent', priority: 'High' },
+        { id: 'LMS-FR-002', module: 'Booking', desc: 'Synchronize inventory across all channels instantly', role: 'System', priority: 'High' },
+        { id: 'LMS-FR-003', module: 'Booking', desc: 'Process booking modifications/cancellations and calculate penalties', role: 'Guest, Receptionist', priority: 'Medium' },
+        { id: 'LMS-FR-004', module: 'Front Desk', desc: 'Capture guest profile data, ID/passport uploads, digital signatures', role: 'Receptionist', priority: 'High' },
+        { id: 'LMS-FR-005', module: 'Front Desk', desc: 'Automatically assign available clean rooms based on category', role: 'Receptionist', priority: 'High' },
+        { id: 'LMS-FR-006', module: 'Front Desk', desc: 'Interface with door-lock hardware to issue RFID key cards', role: 'Receptionist', priority: 'Medium' },
+        { id: 'LMS-FR-007', module: 'Billing', desc: 'Process credit cards and digital wallets through integrated gateway', role: 'Guest, Receptionist', priority: 'High' },
+      ];
+
+      const nonFunctionalReqs = [
+        { id: 'LMS-NFR-001', category: 'Performance', desc: 'Room search results must display in under 1.5 seconds', metric: '< 1.5s', priority: 'High' },
+        { id: 'LMS-NFR-002', category: 'Scalability', desc: 'Support up to 2,000 concurrent users', metric: '2000 concurrent', priority: 'Medium' },
+        { id: 'LMS-NFR-003', category: 'Security', desc: 'Comply with PCI-DSS Level 1; mask card digits', metric: 'PCI-DSS L1', priority: 'High' },
+        { id: 'LMS-NFR-004', category: 'Security', desc: 'Encrypt data AES-256 at rest, TLS 1.3 in transit', metric: 'AES-256, TLS 1.3', priority: 'High' },
+        { id: 'LMS-NFR-005', category: 'Availability', desc: 'Minimum uptime of 99.95% annually', metric: '99.95% uptime', priority: 'High' },
+        { id: 'LMS-NFR-006', category: 'Reliability', desc: 'Automated database backups every 4 hours', metric: 'RPO < 4h', priority: 'High' },
+        { id: 'LMS-NFR-007', category: 'Usability', desc: 'New staff navigate room status in < 15 minutes', metric: '< 15 min training', priority: 'Medium' },
+        { id: 'LMS-NFR-008', category: 'Accessibility', desc: 'Conform to WCAG 2.1 Level AA', metric: 'WCAG 2.1 AA', priority: 'Medium' },
+      ];
+
+      // --------------------------------------------------------------
+      // DOM references
+      // --------------------------------------------------------------
+      const navTabs = document.querySelectorAll('.nav-tab');
+      const panels = {
+        dashboard: document.getElementById('panel-dashboard'),
+        booking: document.getElementById('panel-booking'),
+        housekeeping: document.getElementById('panel-housekeeping'),
+        billing: document.getElementById('panel-billing'),
+        requirements: document.getElementById('panel-requirements'),
+      };
+
+      // --------------------------------------------------------------
+      // Tab switching
+      // --------------------------------------------------------------
+      navTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          navTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          const target = tab.dataset.tab;
+          Object.keys(panels).forEach(key => {
+            panels[key].classList.toggle('active', key === target);
+          });
+        });
+      });
+
+      // --------------------------------------------------------------
+      // RENDER FUNCTIONS
+      // --------------------------------------------------------------
+
+      function renderRoomGrid() {
+        const container = document.getElementById('roomGridContainer');
+        if (!container) return;
+        container.innerHTML = rooms.map(room => {
+          let statusClass = '';
+          let statusText = '';
+          if (room.status === 'clean') { statusClass = 'status-clean'; statusText = 'Clean'; }
+          else if (room.status === 'dirty') { statusClass = 'status-dirty'; statusText = 'Dirty'; }
+          else if (room.status === 'occupied') { statusClass = 'status-occupied'; statusText = 'Occupied'; }
+          else if (room.status === 'maintenance') { statusClass = 'status-maintenance'; statusText = 'Maintenance'; }
+          return `
+            <div class="room-card">
+              <div class="room-number">${room.number}</div>
+              <div class="room-status ${statusClass}">${statusText}</div>
+            </div>
+          `;
+        }).join('');
+
+        // Update dashboard counters
+        const clean = rooms.filter(r => r.status === 'clean').length;
+        const dirty = rooms.filter(r => r.status === 'dirty').length;
+        document.getElementById('cleanCount').textContent = clean;
+        document.getElementById('dirtyCount').textContent = dirty;
+        const occupied = rooms.filter(r => r.status === 'occupied').length;
+        const total = rooms.length;
+        const occupancy = Math.round((occupied / total) * 100);
+        document.getElementById('occupancyValue').textContent = occupancy + '%';
+      }
+
+      function renderArrivals() {
+        const tbody = document.getElementById('arrivalsTableBody');
+        if (!tbody) return;
+        tbody.innerHTML = arrivals.map(a => `
+          <tr>
+            <td><strong>${a.guest}</strong></td>
+            <td>${a.room}</td>
+            <td><span class="badge ${a.action === 'CHECKIN' ? 'badge-low' : 'badge-medium'}">${a.action}</span></td>
+            <td>${a.status}</td>
+          </tr>
+        `).join('');
+      }
+
+      function renderAvailableRooms() {
+        const list = document.getElementById('availableRoomsList');
+        if (!list) return;
+        // Only show rooms that are clean and not maintenance/occupied
+        const available = rooms.filter(r => r.status === 'clean');
+        const priceFilter = document.getElementById('priceFilter')?.value || 'all';
+        let filtered = available;
+        if (priceFilter === 'low') filtered = available.filter(r => r.basePrice < 200);
+        else if (priceFilter === 'mid') filtered = available.filter(r => r.basePrice >= 200 && r.basePrice <= 350);
+        else if (priceFilter === 'high') filtered = available.filter(r => r.basePrice > 350);
+
+        const badge = document.getElementById('roomCountBadge');
+        if (badge) badge.textContent = `(${filtered.length} found)`;
+
+        list.innerHTML = filtered.map(room => `
+          <div class="room-item">
+            <div class="room-img"><i class="fas fa-image"></i></div>
+            <div class="room-info">
+              <h4>${room.category}</h4>
+              <div class="price">$${room.basePrice} <span style="font-size:0.8rem; font-weight:400; color:#64748b;">/ night</span></div>
+              <ul>
+                <li><i class="fas fa-bed"></i> ${room.category.includes('Suite') ? '1 King Bed' : '2 Double Beds'}</li>
+                <li><i class="fas fa-wifi"></i> Free Wi-Fi</li>
+                <li><i class="fas fa-broom"></i> Housekeeping: Daily</li>
+              </ul>
+              <button class="btn" style="width:100%; justify-content:center;" onclick="alert('Booking engine demo: ${room.category} selected.')">Book Now</button>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      function renderHousekeeping() {
+        const grid = document.getElementById('housekeepingGrid');
+        if (!grid) return;
+        // Show all rooms, allow status changes
+        grid.innerHTML = rooms.map(room => {
+          const statusText = room.status.charAt(0).toUpperCase() + room.status.slice(1);
+          return `
+            <div class="hk-card">
+              <div class="hk-room">Room ${room.number}</div>
+              <div><span class="badge ${room.status === 'clean' ? 'badge-low' : (room.status === 'dirty' ? 'badge-high' : 'badge-medium')}">${statusText}</span></div>
+              <div class="hk-actions">
+                <button class="hk-btn clean" data-room-id="${room.id}" data-status="clean">Clean</button>
+                <button class="hk-btn dirty" data-room-id="${room.id}" data-status="dirty">Dirty</button>
+                <button class="hk-btn" data-room-id="${room.id}" data-status="maintenance">Maint.</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        // Attach event listeners
+        grid.querySelectorAll('.hk-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const roomId = e.target.dataset.roomId;
+            const newStatus = e.target.dataset.status;
+            const room = rooms.find(r => r.id === roomId);
+            if (room) {
+              room.status = newStatus;
+              renderRoomGrid();       // update dashboard
+              renderHousekeeping();   // re-render HK grid
+              renderAvailableRooms(); // update booking list
+            }
+          });
+        });
+      }
+
+      function renderBilling() {
+        const tbody = document.getElementById('billingTableBody');
+        if (!tbody) return;
+        tbody.innerHTML = invoices.map(inv => `
+          <tr>
+            <td><strong>${inv.id}</strong></td>
+            <td>${inv.guest}</td>
+            <td>${inv.room}</td>
+            <td>$${inv.amount.toFixed(2)}</td>
+            <td>$${inv.tax.toFixed(2)}</td>
+            <td><span class="badge ${inv.status === 'Paid' ? 'badge-low' : (inv.status === 'Pending' ? 'badge-medium' : 'badge-high')}">${inv.status}</span></td>
+          </tr>
+        `).join('');
+      }
+
+      function renderRequirements() {
+        const funcBody = document.getElementById('functionalReqBody');
+        if (funcBody) {
+          funcBody.innerHTML = functionalReqs.map(r => `
+            <tr>
+              <td><strong>${r.id}</strong></td>
+              <td>${r.module}</td>
+              <td>${r.desc}</td>
+              <td>${r.role}</td>
+              <td><span class="badge ${r.priority === 'High' ? 'badge-high' : 'badge-medium'}">${r.priority}</span></td>
+            </tr>
+          `).join('');
+        }
+
+        const nonFuncBody = document.getElementById('nonFunctionalReqBody');
+        if (nonFuncBody) {
+          nonFuncBody.innerHTML = nonFunctionalReqs.map(r => `
+            <tr>
+              <td><strong>${r.id}</strong></td>
+              <td>${r.category}</td>
+              <td>${r.desc}</td>
+              <td>${r.metric}</td>
+              <td><span class="badge ${r.priority === 'High' ? 'badge-high' : (r.priority === 'Medium' ? 'badge-medium' : 'badge-low')}">${r.priority}</span></td>
+            </tr>
+          `).join('');
+        }
+      }
+
+      // --------------------------------------------------------------
+      // INIT
+      // --------------------------------------------------------------
+      function init() {
+        renderRoomGrid();
+        renderArrivals();
+        renderAvailableRooms();
+        renderHousekeeping();
+        renderBilling();
+        renderRequirements();
+
+        // Search availability button (just for demo)
+        document.getElementById('searchAvailabilityBtn')?.addEventListener('click', () => {
+          renderAvailableRooms();
+          alert('Searching availability for selected dates...');
+        });
+
+        // Price filter
+        document.getElementById('priceFilter')?.addEventListener('change', renderAvailableRooms);
+
+        // Refresh dashboard
+        document.getElementById('refreshRoomsBtn')?.addEventListener('click', () => {
+          renderRoomGrid();
+          renderHousekeeping();
+          renderAvailableRooms();
+        });
+
+        // Global search demo
+        document.getElementById('globalSearchInput')?.addEventListener('keyup', (e) => {
+          const query = e.target.value.toLowerCase().trim();
+          if (!query) return;
+          // Simple highlight of rooms matching search
+          document.querySelectorAll('.room-card').forEach(card => {
+            const text = card.textContent.toLowerCase();
+            card.style.borderColor = text.includes(query) ? '#f0b429' : '#e9eef3';
+            card.style.background = text.includes(query) ? '#fffbf0' : 'white';
+          });
+        });
+      }
+
+      // Run after DOM ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+</body>
+</html>
